@@ -176,3 +176,50 @@ export function formatNaira(amount: number): string {
 export function getPropertyById(id: string): Property | undefined {
   return featuredProperties.find((property) => property.id === id);
 }
+
+export const priceRangeOptions = [
+  { value: "any", label: "Any Price" },
+  { value: "under-1m", label: "Under ₦1m" },
+  { value: "1m-3m", label: "₦1m - ₦3m" },
+  { value: "3m-5m", label: "₦3m - ₦5m" },
+  { value: "5m-plus", label: "₦5m+" },
+] as const;
+
+export type PriceRangeValue = (typeof priceRangeOptions)[number]["value"];
+
+function matchesPriceRange(price: number, range: string): boolean {
+  switch (range) {
+    case "under-1m":
+      return price < 1_000_000;
+    case "1m-3m":
+      return price >= 1_000_000 && price <= 3_000_000;
+    case "3m-5m":
+      return price > 3_000_000 && price <= 5_000_000;
+    case "5m-plus":
+      return price > 5_000_000;
+    default:
+      return true;
+  }
+}
+
+export function filterProperties(
+  properties: Property[],
+  filters: { q?: string; type?: string; price?: string }
+): Property[] {
+  const q = filters.q?.trim().toLowerCase();
+  const type = filters.type?.trim();
+  const price = filters.price?.trim();
+
+  return properties.filter((property) => {
+    const matchesQuery =
+      !q ||
+      property.city.toLowerCase().includes(q) ||
+      property.state.toLowerCase().includes(q) ||
+      property.title.toLowerCase().includes(q);
+
+    const matchesType = !type || type === "any" || property.type === type;
+    const matchesPrice = !price || matchesPriceRange(property.pricePerYear, price);
+
+    return matchesQuery && matchesType && matchesPrice;
+  });
+}

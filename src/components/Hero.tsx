@@ -3,11 +3,19 @@
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 import AnimatedCounter from "@/components/AnimatedCounter";
+import { priceRangeOptions } from "@/lib/properties";
 
-const propertyTypes = ["Any Type", "Apartment", "Duplex", "Bungalow", "Self-Contain", "Mini Flat"];
-const priceRanges = ["Any Price", "Under ₦1m", "₦1m - ₦3m", "₦3m - ₦5m", "₦5m+"];
+const propertyTypes = ["Apartment", "Duplex", "Bungalow", "Self-Contain", "Mini Flat"];
 
-export default function Hero() {
+export default function Hero({
+  defaultQuery = "",
+  defaultType = "any",
+  defaultPrice = "any",
+}: {
+  defaultQuery?: string;
+  defaultType?: string;
+  defaultPrice?: string;
+}) {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-brand-dark via-brand to-emerald-600 text-white">
       <div
@@ -54,21 +62,37 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
+          action="/"
           className="mx-auto mt-10 grid max-w-3xl gap-3 rounded-2xl bg-white p-3 text-left shadow-2xl sm:grid-cols-[1.5fr_1fr_1fr_auto] sm:gap-2"
         >
           <input
             type="text"
+            name="q"
+            defaultValue={defaultQuery}
             placeholder="City or neighborhood, e.g. Lekki"
             className="rounded-xl px-4 py-3 text-sm text-foreground outline-none placeholder:text-foreground/40 sm:border-r sm:border-black/5"
           />
-          <select className="rounded-xl px-3 py-3 text-sm text-foreground/80 outline-none sm:border-r sm:border-black/5">
+          <select
+            name="type"
+            defaultValue={defaultType}
+            className="rounded-xl px-3 py-3 text-sm text-foreground/80 outline-none sm:border-r sm:border-black/5"
+          >
+            <option value="any">Any Type</option>
             {propertyTypes.map((t) => (
-              <option key={t}>{t}</option>
+              <option key={t} value={t}>
+                {t}
+              </option>
             ))}
           </select>
-          <select className="rounded-xl px-3 py-3 text-sm text-foreground/80 outline-none">
-            {priceRanges.map((p) => (
-              <option key={p}>{p}</option>
+          <select
+            name="price"
+            defaultValue={defaultPrice}
+            className="rounded-xl px-3 py-3 text-sm text-foreground/80 outline-none"
+          >
+            {priceRangeOptions.map((p) => (
+              <option key={p.value} value={p.value}>
+                {p.label}
+              </option>
             ))}
           </select>
           <button
