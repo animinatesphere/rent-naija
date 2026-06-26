@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ChangeEvent, type ReactNode } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
 const steps = ["Property", "Details", "Amenities", "Photos", "Review"];
@@ -517,12 +518,20 @@ function SuccessState({ onReset }: { onReset: () => void }) {
         Our team will verify your property and it&apos;ll go live within 24 hours. We&apos;ll
         notify you by email once it&apos;s approved.
       </p>
-      <button
-        onClick={onReset}
-        className="mt-6 rounded-lg border border-brand px-5 py-2.5 text-sm font-semibold text-brand-dark transition hover:bg-brand-light"
-      >
-        List Another Property
-      </button>
+      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
+        <button
+          onClick={onReset}
+          className="rounded-lg border border-brand px-5 py-2.5 text-sm font-semibold text-brand-dark transition hover:bg-brand-light"
+        >
+          List Another Property
+        </button>
+        <Link
+          href="/dashboard"
+          className="rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark"
+        >
+          Go to Dashboard
+        </Link>
+      </div>
     </motion.div>
   );
 }

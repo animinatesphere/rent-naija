@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Logo from "@/components/Logo";
 
 export default function Footer() {
@@ -15,15 +16,27 @@ export default function Footer() {
 
           <FooterColumn
             title="Explore"
-            links={["Find a Home", "List Your Property", "How It Works"]}
+            links={[
+              { label: "Find a Home", href: "/#listings" },
+              { label: "List Your Property", href: "/list-property" },
+              { label: "How It Works", href: "/#how-it-works" },
+              { label: "Landlord Dashboard", href: "/dashboard" },
+            ]}
           />
           <FooterColumn
             title="Company"
-            links={["About Us", "Careers", "Contact"]}
+            links={[
+              { label: "About Us", href: "#" },
+              { label: "Careers", href: "#" },
+              { label: "Contact", href: "#" },
+            ]}
           />
           <FooterColumn
             title="Legal"
-            links={["Terms of Service", "Privacy Policy"]}
+            links={[
+              { label: "Terms of Service", href: "#" },
+              { label: "Privacy Policy", href: "#" },
+            ]}
           />
         </div>
 
@@ -35,16 +48,22 @@ export default function Footer() {
   );
 }
 
-function FooterColumn({ title, links }: { title: string; links: string[] }) {
+function FooterColumn({
+  title,
+  links,
+}: {
+  title: string;
+  links: { label: string; href: string }[];
+}) {
   return (
     <div>
       <h4 className="font-semibold text-foreground">{title}</h4>
       <ul className="mt-3 space-y-2 text-sm text-foreground/60">
         {links.map((link) => (
-          <li key={link}>
-            <a href="#" className="hover:text-brand">
-              {link}
-            </a>
+          <li key={link.label}>
+            <Link href={link.href} className="hover:text-brand">
+              {link.label}
+            </Link>
           </li>
         ))}
       </ul>

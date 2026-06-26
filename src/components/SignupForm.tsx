@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion, type Variants } from "framer-motion";
+import { setLandlordProfile } from "@/lib/profile";
 
 const container: Variants = {
   hidden: { opacity: 0, y: 24 },
@@ -19,9 +21,28 @@ const item: Variants = {
 };
 
 export default function SignupForm() {
+  const router = useRouter();
   const [role, setRole] = useState<"tenant" | "landlord">("tenant");
   const [showPassword, setShowPassword] = useState(false);
   const [focused, setFocused] = useState<string | null>(null);
+
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [businessName, setBusinessName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [city, setCity] = useState("");
+  const [bio, setBio] = useState("");
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    if (role === "landlord") {
+      setLandlordProfile({ fullName, email, businessName, phone, city, bio });
+      router.push("/subscribe?next=/dashboard");
+    } else {
+      router.push("/");
+    }
+  }
 
   return (
     <motion.div
@@ -72,11 +93,24 @@ export default function SignupForm() {
         </button>
       </motion.div>
 
-      <form className="mt-5 space-y-4">
+      {role === "landlord" && (
+        <motion.p
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700"
+        >
+          Landlord accounts require an active subscription to list properties
+          and access the dashboard. You&apos;ll choose a plan after signing up.
+        </motion.p>
+      )}
+
+      <form className="mt-5 space-y-4" onSubmit={handleSubmit}>
         <motion.div variants={item}>
           <label className="text-sm font-medium text-foreground/80">Full Name</label>
           <motion.input
             type="text"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
             placeholder="Ada Obi"
             onFocus={() => setFocused("name")}
             onBlur={() => setFocused(null)}
@@ -94,6 +128,8 @@ export default function SignupForm() {
           <label className="text-sm font-medium text-foreground/80">Email</label>
           <motion.input
             type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
             onFocus={() => setFocused("email")}
             onBlur={() => setFocused(null)}
@@ -106,6 +142,56 @@ export default function SignupForm() {
             className="mt-1 w-full rounded-lg border px-4 py-2.5 text-sm outline-none"
           />
         </motion.div>
+
+        {role === "landlord" && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            className="space-y-4 overflow-hidden"
+          >
+            <div>
+              <label className="text-sm font-medium text-foreground/80">
+                Business / Agency Name
+              </label>
+              <input
+                value={businessName}
+                onChange={(e) => setBusinessName(e.target.value)}
+                placeholder="Adeyemi Properties"
+                className="mt-1 w-full rounded-lg border border-black/10 px-4 py-2.5 text-sm outline-none focus:border-brand"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="text-sm font-medium text-foreground/80">Phone</label>
+                <input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+234..."
+                  className="mt-1 w-full rounded-lg border border-black/10 px-4 py-2.5 text-sm outline-none focus:border-brand"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-foreground/80">City / Area</label>
+                <input
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  placeholder="Lekki, Lagos"
+                  className="mt-1 w-full rounded-lg border border-black/10 px-4 py-2.5 text-sm outline-none focus:border-brand"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-foreground/80">Short Bio</label>
+              <textarea
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                rows={2}
+                placeholder="Tell tenants a bit about yourself or your agency..."
+                className="mt-1 w-full resize-none rounded-lg border border-black/10 px-4 py-2.5 text-sm outline-none focus:border-brand"
+              />
+            </div>
+          </motion.div>
+        )}
 
         <motion.div variants={item}>
           <label className="text-sm font-medium text-foreground/80">Password</label>

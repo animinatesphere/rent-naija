@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import ListPropertyForm from "@/components/ListPropertyForm";
+import SubscriptionGate from "@/components/dashboard/SubscriptionGate";
 
 export default function ListPropertyPage() {
   return (
@@ -22,7 +23,9 @@ export default function ListPropertyPage() {
         </div>
 
         <div className="mt-10 px-6">
-          <ListPropertyForm />
+          <SubscriptionGate redirectTo="/subscribe?next=/list-property">
+            <ListPropertyForm />
+          </SubscriptionGate>
         </div>
       </main>
       <Footer />

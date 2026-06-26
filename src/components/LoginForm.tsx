@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion, type Variants } from "framer-motion";
 
 const container: Variants = {
@@ -19,8 +20,14 @@ const item: Variants = {
 };
 
 export default function LoginForm() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [focused, setFocused] = useState<string | null>(null);
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    router.push("/dashboard");
+  }
 
   return (
     <motion.div
@@ -42,7 +49,7 @@ export default function LoginForm() {
         Log in to manage your search or your listings.
       </motion.p>
 
-      <form className="mt-6 space-y-4">
+      <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
         <motion.div variants={item}>
           <label className="text-sm font-medium text-foreground/80">Email</label>
           <motion.input
@@ -121,6 +128,10 @@ export default function LoginForm() {
         <Link href="/signup" className="font-medium text-brand-dark hover:underline">
           Sign up
         </Link>
+      </motion.p>
+
+      <motion.p variants={item} className="mt-3 text-center text-xs text-foreground/40">
+        Landlord accounts require an active subscription to access the dashboard.
       </motion.p>
     </motion.div>
   );

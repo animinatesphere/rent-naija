@@ -8,11 +8,13 @@ export default function AnimatedCounter({
   suffix = "",
   prefix = "",
   duration = 1.4,
+  className = "text-xl font-bold text-white",
 }: {
   target: number;
   suffix?: string;
   prefix?: string;
   duration?: number;
+  className?: string;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
@@ -35,7 +37,7 @@ export default function AnimatedCounter({
   }, [inView, target, duration]);
 
   return (
-    <motion.span ref={ref} className="text-xl font-bold text-white">
+    <motion.span ref={ref} className={className}>
       {prefix}
       {value.toLocaleString("en-NG")}
       {suffix}
