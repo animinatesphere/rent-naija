@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { formatNaira, type Property } from "@/lib/properties";
+import FavoriteButton from "@/components/FavoriteButton";
 
 export default function PropertyCard({ property }: { property: Property }) {
   return (
@@ -8,6 +9,7 @@ export default function PropertyCard({ property }: { property: Property }) {
         <div
           className={`relative flex h-44 items-end bg-linear-to-br p-4 ${property.tone}`}
         >
+          <FavoriteButton propertyId={property.id} className="absolute left-3 top-3" />
           {property.verified && (
             <span className="absolute right-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-brand-dark">
               ✓ Verified

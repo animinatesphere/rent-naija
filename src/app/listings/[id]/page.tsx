@@ -6,6 +6,7 @@ import Reveal from "@/components/Reveal";
 import PropertyGallery from "@/components/PropertyGallery";
 import ContactLandlordCard from "@/components/ContactLandlordCard";
 import PropertyCard from "@/components/PropertyCard";
+import FavoriteButton from "@/components/FavoriteButton";
 import {
   featuredProperties,
   formatNaira,
@@ -57,13 +58,21 @@ export default async function PropertyDetailPage({
               </Reveal>
 
               <Reveal delay={0.05} className="mt-6">
-                <p className="text-sm text-foreground/50">
-                  {property.city}, {property.state}
-                </p>
-                <h1 className="mt-1 text-2xl font-bold text-foreground sm:text-3xl">
-                  {property.title}
-                </h1>
-                <p className="mt-1 text-sm text-foreground/50">{property.address}</p>
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-sm text-foreground/50">
+                      {property.city}, {property.state}
+                    </p>
+                    <h1 className="mt-1 text-2xl font-bold text-foreground sm:text-3xl">
+                      {property.title}
+                    </h1>
+                    <p className="mt-1 text-sm text-foreground/50">{property.address}</p>
+                  </div>
+                  <FavoriteButton
+                    propertyId={property.id}
+                    className="shrink-0 border border-black/5"
+                  />
+                </div>
 
                 <div className="mt-4 flex flex-wrap items-center gap-6 text-sm text-foreground/70">
                   <span>🛏 {property.bedrooms} Bedrooms</span>
@@ -102,7 +111,11 @@ export default async function PropertyDetailPage({
 
             <div className="lg:col-span-1">
               <div className="lg:sticky lg:top-24">
-                <ContactLandlordCard landlord={property.landlord} />
+                <ContactLandlordCard
+                  landlord={property.landlord}
+                  propertyId={property.id}
+                  propertyTitle={property.title}
+                />
               </div>
             </div>
           </div>

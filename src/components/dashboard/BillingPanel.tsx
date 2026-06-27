@@ -94,17 +94,17 @@ export default function BillingPanel() {
       <div className="rounded-2xl border border-black/5 bg-white p-6">
         <h3 className="font-semibold text-foreground">Billing History</h3>
         <div className="mt-4 divide-y divide-black/5 text-sm">
-          <div className="flex items-center justify-between py-3">
+          <div className="flex flex-wrap items-center justify-between gap-2 py-3">
             <div>
               <p className="font-medium text-foreground">{plan.name} Plan</p>
               <p className="text-xs text-foreground/50">
                 {subscribedDate.toLocaleDateString("en-NG", { day: "numeric", month: "long", year: "numeric" })}
               </p>
             </div>
-            <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+            <span className="shrink-0 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
               Paid
             </span>
-            <p className="font-medium text-foreground">{formatNaira(price)}</p>
+            <p className="shrink-0 font-medium text-foreground">{formatNaira(price)}</p>
           </div>
         </div>
       </div>

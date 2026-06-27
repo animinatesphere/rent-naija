@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, type Variants } from "framer-motion";
 import { setLandlordProfile } from "@/lib/profile";
+import { setTenantProfile } from "@/lib/tenant";
 
 const container: Variants = {
   hidden: { opacity: 0, y: 24 },
@@ -40,7 +41,8 @@ export default function SignupForm() {
       setLandlordProfile({ fullName, email, businessName, phone, city, bio });
       router.push("/subscribe?next=/dashboard");
     } else {
-      router.push("/");
+      setTenantProfile({ fullName, email, phone: "" });
+      router.push("/tenant");
     }
   }
 

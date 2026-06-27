@@ -3,9 +3,29 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import type { Property } from "@/lib/properties";
+import { addInquiryRecord } from "@/lib/tenant";
 
-export default function ContactLandlordCard({ landlord }: { landlord: Property["landlord"] }) {
+export default function ContactLandlordCard({
+  landlord,
+  propertyId,
+  propertyTitle,
+}: {
+  landlord: Property["landlord"];
+  propertyId: string;
+  propertyTitle: string;
+}) {
   const [sent, setSent] = useState(false);
+  const [booked, setBooked] = useState(false);
+
+  function handleBook() {
+    addInquiryRecord({ propertyId, propertyTitle, type: "inspection" });
+    setBooked(true);
+  }
+
+  function handleMessage() {
+    addInquiryRecord({ propertyId, propertyTitle, type: "message" });
+    setSent(true);
+  }
 
   return (
     <motion.div
@@ -28,15 +48,17 @@ export default function ContactLandlordCard({ landlord }: { landlord: Property["
       </p>
 
       <motion.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        className="mt-5 w-full rounded-lg bg-brand py-2.5 text-sm font-semibold text-white shadow-md shadow-brand/20 transition hover:bg-brand-dark"
+        onClick={handleBook}
+        disabled={booked}
+        whileHover={!booked ? { scale: 1.02 } : undefined}
+        whileTap={!booked ? { scale: 0.98 } : undefined}
+        className="mt-5 w-full rounded-lg bg-brand py-2.5 text-sm font-semibold text-white shadow-md shadow-brand/20 transition hover:bg-brand-dark disabled:cursor-default disabled:bg-emerald-600"
       >
-        Book an Inspection
+        {booked ? "Inspection Requested ✓" : "Book an Inspection"}
       </motion.button>
 
       <motion.button
-        onClick={() => setSent(true)}
+        onClick={handleMessage}
         disabled={sent}
         whileHover={!sent ? { scale: 1.02 } : undefined}
         whileTap={!sent ? { scale: 0.98 } : undefined}

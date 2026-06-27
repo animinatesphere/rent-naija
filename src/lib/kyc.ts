@@ -42,3 +42,18 @@ export function submitKyc(data: { fullName: string; idType: string; idNumber: st
   };
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(record));
 }
+
+export function approveKyc(): void {
+  if (typeof window === "undefined") return;
+  const record = getKycRecord();
+  if (!record) return;
+  window.localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify({ ...record, status: "verified" })
+  );
+}
+
+export function rejectKyc(): void {
+  if (typeof window === "undefined") return;
+  window.localStorage.removeItem(STORAGE_KEY);
+}

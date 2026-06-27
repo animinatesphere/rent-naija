@@ -3,6 +3,7 @@ import Topbar from "@/components/dashboard/Topbar";
 import Reveal from "@/components/Reveal";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import StatusBadge from "@/components/dashboard/StatusBadge";
+import OccupancyBadge from "@/components/dashboard/OccupancyBadge";
 import VerificationBanner from "@/components/dashboard/VerificationBanner";
 import ShareStorefrontCard from "@/components/dashboard/ShareStorefrontCard";
 import QuickActions from "@/components/dashboard/QuickActions";
@@ -39,11 +40,22 @@ export default function DashboardOverviewPage() {
           <StatCard delay={0.1} label="Inquiries" value={stats.totalInquiries} />
           <StatCard
             delay={0.15}
-            label="Est. Annual Earnings"
+            label={`Est. Annual Earnings (${stats.occupiedCount} occupied)`}
             value={stats.estimatedEarnings}
             formatted={stats.estimatedEarningsLabel}
           />
         </div>
+
+        {stats.vacantVerifiedListings > 0 && (
+          <Reveal delay={0.05} className="flex items-center gap-3 rounded-2xl border border-blue-200 bg-blue-50 px-5 py-4">
+            <span className="text-xl">🏠</span>
+            <p className="text-sm text-blue-800">
+              You have {stats.vacantVerifiedListings} verified listing
+              {stats.vacantVerifiedListings === 1 ? "" : "s"} marked as vacant — earnings only
+              count occupied units. Mark a listing occupied once a tenant moves in.
+            </p>
+          </Reveal>
+        )}
 
         <div className="grid gap-6 lg:grid-cols-3">
           <Reveal delay={0.1} className="lg:col-span-2">
@@ -80,7 +92,10 @@ export default function DashboardOverviewPage() {
                         {formatNaira(listing.property.pricePerYear)}/year · {listing.views} views
                       </p>
                     </div>
-                    <StatusBadge status={listing.status} />
+                    <div className="flex shrink-0 flex-col items-end gap-1">
+                      <StatusBadge status={listing.status} />
+                      <OccupancyBadge occupied={listing.occupied} />
+                    </div>
                   </Link>
                 ))}
               </div>

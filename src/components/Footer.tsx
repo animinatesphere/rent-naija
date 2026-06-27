@@ -18,6 +18,7 @@ export default function Footer() {
             title="Explore"
             links={[
               { label: "Find a Home", href: "/#listings" },
+              { label: "Saved Homes", href: "/tenant" },
               { label: "List Your Property", href: "/list-property" },
               { label: "How It Works", href: "/#how-it-works" },
               { label: "Landlord Dashboard", href: "/dashboard" },

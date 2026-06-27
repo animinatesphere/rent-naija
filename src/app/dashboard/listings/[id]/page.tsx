@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Topbar from "@/components/dashboard/Topbar";
 import StatusBadge from "@/components/dashboard/StatusBadge";
+import OccupancyBadge from "@/components/dashboard/OccupancyBadge";
 import Reveal from "@/components/Reveal";
 import { getLandlordListingByPropertyId, inquiries } from "@/lib/dashboard";
 import { formatNaira } from "@/lib/properties";
@@ -65,7 +66,10 @@ export default async function VendorListingDetailPage({
                     </p>
                     <h1 className="mt-1 text-xl font-bold text-foreground">{property.title}</h1>
                   </div>
-                  <StatusBadge status={listing.status} />
+                  <div className="flex flex-col items-end gap-1.5">
+                    <StatusBadge status={listing.status} />
+                    <OccupancyBadge occupied={listing.occupied} />
+                  </div>
                 </div>
 
                 <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-foreground/70">

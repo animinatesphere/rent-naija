@@ -18,16 +18,17 @@ export type ListingStatus = "Verified" | "Pending" | "Draft";
 export type LandlordListing = {
   property: Property;
   status: ListingStatus;
+  occupied: boolean;
   views: number;
   inquiries: number;
   datePosted: string;
 };
 
 export const landlordListings: LandlordListing[] = [
-  { property: featuredProperties[0], status: "Verified", views: 482, inquiries: 12, datePosted: "2026-04-02" },
-  { property: featuredProperties[1], status: "Verified", views: 311, inquiries: 7, datePosted: "2026-04-18" },
-  { property: featuredProperties[2], status: "Pending", views: 94, inquiries: 2, datePosted: "2026-06-10" },
-  { property: featuredProperties[4], status: "Draft", views: 0, inquiries: 0, datePosted: "2026-06-20" },
+  { property: featuredProperties[0], status: "Verified", occupied: true, views: 482, inquiries: 12, datePosted: "2026-04-02" },
+  { property: featuredProperties[1], status: "Verified", occupied: false, views: 311, inquiries: 7, datePosted: "2026-04-18" },
+  { property: featuredProperties[2], status: "Pending", occupied: false, views: 94, inquiries: 2, datePosted: "2026-06-10" },
+  { property: featuredProperties[4], status: "Draft", occupied: false, views: 0, inquiries: 0, datePosted: "2026-06-20" },
 ];
 
 export type Inquiry = {
@@ -90,14 +91,21 @@ export function getDashboardStats() {
   const totalViews = landlordListings.reduce((sum, l) => sum + l.views, 0);
   const totalInquiries = landlordListings.reduce((sum, l) => sum + l.inquiries, 0);
   const activeListings = landlordListings.filter((l) => l.status === "Verified").length;
-  const estimatedEarnings = landlordListings
-    .filter((l) => l.status === "Verified")
-    .reduce((sum, l) => sum + l.property.pricePerYear, 0);
+  const occupiedListings = landlordListings.filter((l) => l.occupied);
+  const vacantVerifiedListings = landlordListings.filter(
+    (l) => l.status === "Verified" && !l.occupied
+  ).length;
+  const estimatedEarnings = occupiedListings.reduce(
+    (sum, l) => sum + l.property.pricePerYear,
+    0
+  );
 
   return {
     totalViews,
     totalInquiries,
     activeListings,
+    occupiedCount: occupiedListings.length,
+    vacantVerifiedListings,
     estimatedEarnings,
     estimatedEarningsLabel: formatNaira(estimatedEarnings),
   };
